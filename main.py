@@ -76,7 +76,7 @@ async def mess_handler(message: types.Message):
 
 @dp.message_handler(content_types=["left_chat_member"])
 async def start_commandr(message: types.Message):
-    await message.answer("🤷‍♀️Чё приходил этот говноед...🤷🏻‍♂️")
+    await message.answer("Ливнул, сучара...\n🤷‍♀️Чё приходил этот говноед...🤷🏻‍♂️")
 
 if __name__ == "__main__":
     executor.start_polling(dp, skip_updates=True)
