@@ -56,6 +56,7 @@ def mute(message: types.Message):
 async def user_joined(message: types.Message):
     new_mem = await message.answer("Привет!\nтолько для подписчиков канала @OmArtVall", reply_markup=nav.channelMenu)
     asyncio.create_task(delete_message(new_mem, 5))
+    await message.delete()
 
 
 @dp.message_handler()
