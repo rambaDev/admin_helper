@@ -1,5 +1,6 @@
 import sqlite3
 import time
+from aiogram.utils import executor
 
 
 class Database:

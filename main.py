@@ -3,6 +3,7 @@ import logging
 import time
 from time import time
 from aiogram import Bot, Dispatcher, executor, types
+from aiogram.utils import executor
 import asyncio
 from contextlib import suppress
 
