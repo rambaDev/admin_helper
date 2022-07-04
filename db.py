@@ -26,4 +26,4 @@ class Database:
 
     def add_mute(self, user_id, mute_time):
         with self.connection:
-            return self.connection.execute("UPDATE 'users' SET 'mute_time' = ? WHERE 'user_id' = ?", (int(time.time()) + mute_time, user_id,))
+            return self.connection.execute("UPDATE 'users' SET 'mute_time' = ? WHERE 'user_id' = ?", (int(time.time()) + (mute_time * 60), user_id,))
