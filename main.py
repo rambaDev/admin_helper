@@ -62,7 +62,7 @@ async def mute(message: types.Message):
 
 @dp.message_handler(content_types=["new_chat_members"])
 async def user_joined(message: types.Message):
-    new_mem = await message.answer("Привет!\nтолько для подписчиков канала @OmArtVall", reply_markup=nav.channelMenu)
+    new_mem = await message.answer("Привет! чат доступен:\nтолько для подписчиков канала @OmArtVall", reply_markup=nav.channelMenu)
     asyncio.create_task(delete_message(new_mem, 5))
     await message.delete()
 
@@ -78,7 +78,7 @@ async def mess_handler(message: types.Message):
             if word in text:
                 await message.delete()
     else:
-        msg = await message.answer("ТОЛЬКО ДЛЯ ПОДПИСЧИКОВ КАНАЛА!!!\n\nЕсть 3 секунды сделать это\n\n @OmArtVall", reply_markup=nav.channelMenu)
+        msg = await message.answer("Чат доступен:\nТОЛЬКО ДЛЯ ПОДПИСЧИКОВ КАНАЛА!!!\n\nЕсть 3 секунды сделать это\n\n @OmArtVall", reply_markup=nav.channelMenu)
         asyncio.create_task(delete_message(msg, 3))
         await message.delete()
 
