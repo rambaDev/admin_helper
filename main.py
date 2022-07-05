@@ -44,13 +44,20 @@ async def mute(message: types.Message):
         await message.reply_to_message.reply(f"Занят горловым миньетом на {mute_sec} минут!")
 
 
-@dp.message_handler(commands=['мут'])
-def mute(message: types.Message):
+@dp.message_handler(commands=['мут'], commands_prefix="!")
+async def mute(message: types.Message):
     print(message.reply_to_message.from_user.id)
-    bot.restrict_chat_member(
-        message.chat.id, message.reply_to_message.from_user.id, until_date=time.time() + 120)
-    bot.send_message(message.chat.id, 'Администратор кинул вас в мут на 2м',
-                     reply_to_message_id=message.message_id)
+    # bot.restrict_chat_member(message.chat.id, message.reply_to_message.from_user.id, until_date=time.time() + 120)
+    await bot.restrict_chat_member(
+        cfg.CHAT_ID, message.reply_to_message.from_user.id, can_send_messages=False, until_date=time.time() + 12)
+    # bot.send_message(message.chat.id, 'Администратор кинул вас в мут на 2м',reply_to_message_id=message.message_id)
+
+
+@dp.message_handler(commands=['размут'], commands_prefix="!")
+async def mute(message: types.Message):
+    print(message.reply_to_message.from_user.id)
+    await bot.restrict_chat_member(
+        cfg.CHAT_ID, message.reply_to_message.from_user.id, can_send_messages=True)
 
 
 @dp.message_handler(content_types=["new_chat_members"])
