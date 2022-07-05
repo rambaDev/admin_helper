@@ -49,7 +49,7 @@ async def mute(message: types.Message):
     print(message.reply_to_message.from_user.id)
     # bot.restrict_chat_member(message.chat.id, message.reply_to_message.from_user.id, until_date=time.time() + 120)
     await bot.restrict_chat_member(
-        cfg.CHAT_ID, message.reply_to_message.from_user.id, can_send_messages=False, until_date=time.time() + 12)
+        cfg.CHAT_ID, message.reply_to_message.from_user.id, can_send_messages=False)
     # bot.send_message(message.chat.id, 'Администратор кинул вас в мут на 2м',reply_to_message_id=message.message_id)
 
 
