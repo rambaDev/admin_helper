@@ -6,3 +6,4 @@ database.db
 venvzelya/
 venvAdminHelper/
 moderator_bot.bat
+.gitignore
