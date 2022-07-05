@@ -5,4 +5,4 @@ config.py
 database.db
 venvzelya/
 venvAdminHelper/
-start_bot.bat
+moderator_bot.bat
