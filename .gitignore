@@ -1,9 +1,0 @@
-.idea/
-.vscode/
-__pycache__/
-config.py
-database.db
-venvzelya/
-venvAdminHelper/
-moderator_bot.bat
-.gitignore
