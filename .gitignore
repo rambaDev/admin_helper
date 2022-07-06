@@ -1,6 +1,6 @@
 .idea/
 .vscode/
-venv*
+venvzelya/
 config.py
 database.db
 Start_bot.bat
