@@ -50,7 +50,7 @@ async def mute(message: types.Message):
     # bot.restrict_chat_member(message.chat.id, message.reply_to_message.from_user.id, until_date=time.time() + 120)
     await bot.restrict_chat_member(
         cfg.CHAT_ID, message.reply_to_message.from_user.id, can_send_messages=False)
-    # bot.send_message(message.chat.id, 'Администратор кинул вас в мут на 2м',reply_to_message_id=message.message_id)
+    # await bot.send_message(message.chat.id, 'Администратор кинул вас в мут на 2м', reply_to_message_id=message.message_id)
 
 
 @dp.message_handler(commands=['размут'], commands_prefix="!")
@@ -63,7 +63,7 @@ async def mute(message: types.Message):
 @dp.message_handler(content_types=["new_chat_members"])
 async def user_joined(message: types.Message):
     new_mem = await message.reply(f'{message.from_user.full_name}, Привет! чат доступен:\nтолько для подписчиков канала @OmArtVall', reply_markup=nav.channelMenu)
-    asyncio.create_task(delete_message(new_mem, 5))
+    asyncio.create_task(delete_message(new_mem, 10))
     await message.delete()
 
 
@@ -79,7 +79,7 @@ async def mess_handler(message: types.Message):
                 await message.delete()
     else:
         msg = await message.reply(f'{message.from_user.full_name}, Чат доступен:\nТОЛЬКО ДЛЯ ПОДПИСЧИКОВ КАНАЛА!!!\n\nЕсть 3 секунды сделать это\n\n @OmArtVall', reply_markup=nav.channelMenu)
-        asyncio.create_task(delete_message(msg, 5))
+        asyncio.create_task(delete_message(msg, 10))
         await message.delete()
 
 
