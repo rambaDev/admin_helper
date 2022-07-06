@@ -4,5 +4,5 @@ venvzelya/
 __pycache__/
 config.py
 database.db
-Start_bot.bat
+moderator.bat
 readme.txt
