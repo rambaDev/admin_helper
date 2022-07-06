@@ -1,9 +1,7 @@
-config.py
-database.db
-Start_bot.bat
-readme.txt
-test.py
 .idea/
 __pycache__/
 .vscode/
 venvzelya/
+config.py
+database.db
+Start_bot.bat
