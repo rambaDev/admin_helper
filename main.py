@@ -79,7 +79,7 @@ async def mess_handler(message: types.Message):
                 await message.delete()
     else:
         msg = await message.reply(f'{message.from_user.full_name}, Чат доступен:\nТОЛЬКО ДЛЯ ПОДПИСЧИКОВ КАНАЛА!!!\n\nЕсть 3 секунды сделать это\n\n @OmArtVall', reply_markup=nav.channelMenu)
-        asyncio.create_task(delete_message(msg, 3))
+        asyncio.create_task(delete_message(msg, 5))
         await message.delete()
 
 
