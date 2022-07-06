@@ -1,8 +1,8 @@
-__pycache__
-.idea
-.vscode
-venvzelya
 config.py
 database.db
 Start_bot.bat
 readme.txt
+__pycache__/
+.idea/
+.vscode/
+venvzelya/
