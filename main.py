@@ -22,6 +22,7 @@ dp = Dispatcher(bot)
 db = Database('database.db')
 chat_admins = bot.get_chat_administrators(cfg.CHAT_ID)
 
+
 print(chat_admins)
 
 # Реализация логирования в отдельный файл: moderator.log
@@ -44,16 +45,8 @@ def check_sub_channel(chat_member):
 
 @dp.message_handler(commands=['мут'], commands_prefix="!")
 async def mut(message: types.Message):
-
-    if str(message.from_user.username) == 'None':
-        x = str(message.reply_to_message.from_user.full_name)
-
-    elif str(message.reply_to_message.from_user.username) == 'None':
-        y = str(message.reply_to_message.from_user.full_name)
-
-    else:
-        x = str(message.from_user.username)
-        y = str(message.reply_to_message.from_user.username)
+    x = str(message.from_user.username)
+    y = str(message.reply_to_message.from_user.username)
 
     print(f"этот---> {x}, заблочил этого--> {y}")
     mute_min = int(message.text[5:])
@@ -75,8 +68,9 @@ async def unmut(message: types.Message):
 
 @dp.message_handler(commands=['свой'], commands_prefix="!")
 async def add_svoi(message: types.Message):
-    z = 1
-    db.add_wite_list(message.from_user.id)
+    if str(message.from_user.id) == cfg.ADMIN_ID:
+        fs = True
+        db.add_wite_list(message.reply_to_message.from_user.id, fs)
 
 
 @dp.message_handler(content_types=["new_chat_members"])

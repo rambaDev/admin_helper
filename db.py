@@ -30,13 +30,13 @@ class Database:
         with self.connection:
             return self.connection.execute("UPDATE 'users' SET 'mute_time' = ? WHERE 'user_id' = ?", (int(time.time()) + (mute_time * 60), user_id,))
 
-#    def examination_white_list(self, user_id):
-#        with self.connection:
-#            check = self.cursor.execute(
-#                "SELECT * FROM 'users' WHERE 'user_id' = ?", (user_id,)).fetchone()
-#            return int(check[3]) >= 1
-
-    def add_wite_list(self, user_id, white_list):
+    def examination_white_list(self, user_id):
         with self.connection:
-            z = 1
-            return self.connection.execute("UPDATE 'users' SET 'white_list' = ? WHERE 'user_id' = ?", int(z), user_id,)
+            check = self.cursor.execute(
+                "SELECT * FROM users WHERE white_list = ?", (user_id,)).fetchone()
+            return int(check[3]) >= int([0])
+
+    def add_wite_list(self, user_id, fs):
+        with self.connection:
+            print(user_id, fs)
+            return self.connection.execute("UPDATE users SET white_list = ? WHERE user_id = ?", (fs, user_id,))
