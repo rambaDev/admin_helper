@@ -34,7 +34,7 @@ class Database:
         with self.connection:
             check = self.cursor.execute(
                 "SELECT * FROM users WHERE white_list = ?", (user_id,)).fetchone()
-            return int(check[3]) >= int([0])
+            return int(check[3]) != int([0])
 
     def add_wite_list(self, user_id, fs):
         with self.connection:

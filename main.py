@@ -71,6 +71,7 @@ async def add_svoi(message: types.Message):
     if str(message.from_user.id) == cfg.ADMIN_ID:
         fs = True
         db.add_wite_list(message.reply_to_message.from_user.id, fs)
+        await message.bot.delete_message(cfg.CHAT_ID, message.message_id)
 
 
 @dp.message_handler(content_types=["new_chat_members"])
@@ -90,15 +91,11 @@ async def mess_handler(message: types.Message):
         for word in cfg.WORLDS:
             if word in text:
                 await message.delete()
+
     else:
         msg = await message.reply(f'{message.from_user.full_name}, Чат доступен:\nТОЛЬКО ДЛЯ ПОДПИСЧИКОВ КАНАЛА!!!\n\nЕсть 3 секунды сделать это\n\n @OmArtVall', reply_markup=nav.channelMenu)
         asyncio.create_task(delete_message(msg, 5))
         await message.delete()
-
-    if message.text.lower() == 'стик':
-        await message.reply(f"Воу-воу, битва админов.\n Заценю с кайфом!")
-        stik = 'CAACAgIAAxkBAAEFNMlixakAAaUKMz_zjxnVBERZHYBlOV0AAqocAAK0tFhII3PqRlvmZNopBA'
-        await bot.send_sticker(message.chat.id, stik)
 
 
 @dp.message_handler(content_types=["left_chat_member"])
