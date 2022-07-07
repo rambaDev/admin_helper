@@ -1,7 +1,8 @@
 import logging
-#import telebot
+import math
 import time
-from time import time
+from datetime import datetime
+# from time import time
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.utils import executor
 import asyncio
@@ -22,8 +23,7 @@ db = Database('database.db')
 
 # Реализация логирования в отдельный файл: moderator.log
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
-                    level=logging.INFO,
-                    filename='moderator.log')
+                    level=logging.INFO, filename='moderator.log')
 
 
 async def delete_message(message: types.Message, sleep_time: int = 0):
@@ -49,20 +49,27 @@ async def mute(message: types.Message):
         await message.reply_to_message.reply(f"Занят горловым миньетом на {mute_sec} минут!")
 
 
+# Декоратор накинуть мут в чате. отправить !мут 55 в ответ сообщения (мут на 55 мин)
+
+
 @dp.message_handler(commands=['мут'], commands_prefix="!")
-async def mute(message: types.Message):
+async def mut(message: types.Message):
     print(message.reply_to_message.from_user.id)
-    # bot.restrict_chat_member(message.chat.id, message.reply_to_message.from_user.id, until_date=time.time() + 120)
-    await bot.restrict_chat_member(
-        cfg.CHAT_ID, message.reply_to_message.from_user.id, can_send_messages=False)
-    # bot.send_message(message.chat.id, 'Администратор кинул вас в мут на 2м',reply_to_message_id=message.message_id)
+    mute_min = int(message.text[5:])
+    await bot.restrict_chat_member(cfg.CHAT_ID, message.reply_to_message.from_user.id, until_date=math.floor(time.time()) + mute_min * 60, can_send_messages=False, can_send_media_messages=False, can_send_other_messages=False, can_add_web_page_previews=False)
+    await message.bot.delete_message(cfg.CHAT_ID, message.reply_to_message.message_id)
+    await message.bot.delete_message(cfg.CHAT_ID, message.message_id)
+    await bot.send_message(message.chat.id, f'{message.from_user.full_name} заблокировал {message.reply_to_message.from_user.full_name} на {mute_min} минут')
+
+
+# Декоратор разрешить писать в чате в чате.
 
 
 @dp.message_handler(commands=['размут'], commands_prefix="!")
-async def mute(message: types.Message):
+async def unmut(message: types.Message):
     print(message.reply_to_message.from_user.id)
     await bot.restrict_chat_member(
-        cfg.CHAT_ID, message.reply_to_message.from_user.id, can_send_messages=True)
+        cfg.CHAT_ID, message.reply_to_message.from_user.id, can_send_messages=True, can_send_media_messages=True, can_send_other_messages=True, can_add_web_page_previews=True)
 
 
 @dp.message_handler(content_types=["new_chat_members"])
