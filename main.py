@@ -20,6 +20,11 @@ bot = Bot(token=cfg.tg_bot_token)
 dp = Dispatcher(bot)
 db = Database('database.db')
 
+# Реализация логирования в отдельный файл: moderator.log
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
+                    level=logging.INFO,
+                    filename='moderator.log')
+
 
 async def delete_message(message: types.Message, sleep_time: int = 0):
     await asyncio.sleep(sleep_time)
@@ -50,7 +55,7 @@ async def mute(message: types.Message):
     # bot.restrict_chat_member(message.chat.id, message.reply_to_message.from_user.id, until_date=time.time() + 120)
     await bot.restrict_chat_member(
         cfg.CHAT_ID, message.reply_to_message.from_user.id, can_send_messages=False)
-    # await bot.send_message(message.chat.id, 'Администратор кинул вас в мут на 2м', reply_to_message_id=message.message_id)
+    # bot.send_message(message.chat.id, 'Администратор кинул вас в мут на 2м',reply_to_message_id=message.message_id)
 
 
 @dp.message_handler(commands=['размут'], commands_prefix="!")
@@ -63,7 +68,7 @@ async def mute(message: types.Message):
 @dp.message_handler(content_types=["new_chat_members"])
 async def user_joined(message: types.Message):
     new_mem = await message.reply(f'{message.from_user.full_name}, Привет! чат доступен:\nтолько для подписчиков канала @OmArtVall', reply_markup=nav.channelMenu)
-    asyncio.create_task(delete_message(new_mem, 10))
+    asyncio.create_task(delete_message(new_mem, 5))
     await message.delete()
 
 
@@ -79,8 +84,13 @@ async def mess_handler(message: types.Message):
                 await message.delete()
     else:
         msg = await message.reply(f'{message.from_user.full_name}, Чат доступен:\nТОЛЬКО ДЛЯ ПОДПИСЧИКОВ КАНАЛА!!!\n\nЕсть 3 секунды сделать это\n\n @OmArtVall', reply_markup=nav.channelMenu)
-        asyncio.create_task(delete_message(msg, 10))
+        asyncio.create_task(delete_message(msg, 5))
         await message.delete()
+
+    if message.text.lower() == 'стик':
+        await message.reply(f"Воу-воу, битва админов.\n Заценю с кайфом!")
+        stik = 'CAACAgIAAxkBAAEFNMlixakAAaUKMz_zjxnVBERZHYBlOV0AAqocAAK0tFhII3PqRlvmZNopBA'
+        await bot.send_sticker(message.chat.id, stik)
 
 
 @dp.message_handler(content_types=["left_chat_member"])

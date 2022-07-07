@@ -1,7 +1,7 @@
 .idea/
 .vscode/
 venvzelya/
-__pycache__/
+*__pycache__*
 config.py
 database.db
 moderator.bat
