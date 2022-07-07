@@ -1,6 +1,7 @@
 import logging
 import math
 import time
+import asyncio
 from datetime import datetime
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.utils import executor
@@ -15,7 +16,7 @@ import config as cfg
 import markups as nav
 from db import Database
 
-logging.basicConfig(level=logging.INFO)
+# logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=cfg.tg_bot_token)
 dp = Dispatcher(bot)
@@ -25,9 +26,10 @@ chat_admins = bot.get_chat_administrators(cfg.CHAT_ID)
 
 print(chat_admins)
 
+
 # Реализация логирования в отдельный файл: moderator.log
-logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
-                    level=logging.INFO, filename='moderator.log')
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 
 async def delete_message(message: types.Message, sleep_time: int = 0):
@@ -86,16 +88,19 @@ async def mess_handler(message: types.Message):
     if not db.user_exists(message.from_user.id):
         db.add_user(message.from_user.id)
 
-    if check_sub_channel(await bot.get_chat_member(chat_id=cfg.CHANNEL_ID, user_id=message.from_user.id)):
-        text = message.text.lower()
-        for word in cfg.WORLDS:
-            if word in text:
-                await message.delete()
+    if not db.examination_white_list(message.from_user.id):
+        if check_sub_channel(await bot.get_chat_member(chat_id=cfg.CHANNEL_ID, user_id=message.from_user.id)):
+            text = message.text.lower()
+            for word in cfg.WORLDS:
+                if word in text:
+                    await message.delete()
 
+        else:
+            msg = await message.reply(f'{message.from_user.full_name}, Чат доступен:\nТОЛЬКО ДЛЯ ПОДПИСЧИКОВ КАНАЛА!!!\n\nЕсть 3 секунды сделать это\n\n @OmArtVall', reply_markup=nav.channelMenu)
+            asyncio.create_task(delete_message(msg, 5))
+            await message.delete()
     else:
-        msg = await message.reply(f'{message.from_user.full_name}, Чат доступен:\nТОЛЬКО ДЛЯ ПОДПИСЧИКОВ КАНАЛА!!!\n\nЕсть 3 секунды сделать это\n\n @OmArtVall', reply_markup=nav.channelMenu)
-        asyncio.create_task(delete_message(msg, 5))
-        await message.delete()
+        print('z v o')
 
 
 @dp.message_handler(content_types=["left_chat_member"])
