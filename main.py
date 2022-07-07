@@ -6,6 +6,7 @@ from aiogram import Bot, Dispatcher, executor, types
 from aiogram.utils import executor
 import asyncio
 from contextlib import suppress
+import requests
 
 from aiogram.utils.exceptions import (
     MessageToEditNotFound, MessageCantBeEdited, MessageCantBeDeleted, MessageToDeleteNotFound)
@@ -43,12 +44,23 @@ def check_sub_channel(chat_member):
 
 @dp.message_handler(commands=['мут'], commands_prefix="!")
 async def mut(message: types.Message):
-    print(message.reply_to_message.from_user.id)
+
+    if str(message.from_user.username) == 'None':
+        x = str(message.reply_to_message.from_user.full_name)
+
+    elif str(message.reply_to_message.from_user.username) == 'None':
+        y = str(message.reply_to_message.from_user.full_name)
+
+    else:
+        x = str(message.from_user.username)
+        y = str(message.reply_to_message.from_user.username)
+
+    print(f"этот---> {x}, заблочил этого--> {y}")
     mute_min = int(message.text[5:])
     await bot.restrict_chat_member(cfg.CHAT_ID, message.reply_to_message.from_user.id, until_date=math.floor(time.time()) + mute_min * 60, can_send_messages=False, can_send_media_messages=False, can_send_other_messages=False, can_add_web_page_previews=False)
     await message.bot.delete_message(cfg.CHAT_ID, message.reply_to_message.message_id)
     await message.bot.delete_message(cfg.CHAT_ID, message.message_id)
-    await bot.send_message(message.chat.id, f'{message.from_user.full_name} заблокировал {message.reply_to_message.from_user.full_name} на {mute_min} минут')
+    await bot.send_message(message.chat.id, f'@{x} заблокировал @{y} на {mute_min} минут')
 
 
 # Декоратор разрешить писать в чате в чате.
@@ -59,6 +71,12 @@ async def unmut(message: types.Message):
     print(message.reply_to_message.from_user.id)
     await bot.restrict_chat_member(
         cfg.CHAT_ID, message.reply_to_message.from_user.id, can_send_messages=True, can_send_media_messages=True, can_send_other_messages=True, can_add_web_page_previews=True)
+
+
+@dp.message_handler(commands=['свой'], commands_prefix="!")
+async def add_svoi(message: types.Message):
+    z = 1
+    db.add_wite_list(message.from_user.id)
 
 
 @dp.message_handler(content_types=["new_chat_members"])

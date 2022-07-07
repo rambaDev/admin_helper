@@ -1,6 +1,7 @@
 import sqlite3
 import time
 from time import time
+from xmlrpc.client import boolean
 from aiogram.utils import executor
 
 
@@ -35,6 +36,7 @@ class Database:
 #                "SELECT * FROM 'users' WHERE 'user_id' = ?", (user_id,)).fetchone()
 #            return int(check[3]) >= 1
 
-#    def add_wite_list(self, user_id, white_list):
-#        with self.connection:
-#            return self.connection.execute("INSERT INTO 'users' ('white_list') VALUES(?)", 1)
+    def add_wite_list(self, user_id, white_list):
+        with self.connection:
+            z = 1
+            return self.connection.execute("UPDATE 'users' SET 'white_list' = ? WHERE 'user_id' = ?", int(z), user_id,)
