@@ -2,7 +2,6 @@ import logging
 import math
 import time
 from datetime import datetime
-# from time import time
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.utils import executor
 import asyncio
@@ -20,6 +19,9 @@ logging.basicConfig(level=logging.INFO)
 bot = Bot(token=cfg.tg_bot_token)
 dp = Dispatcher(bot)
 db = Database('database.db')
+chat_admins = bot.get_chat_administrators(cfg.CHAT_ID)
+
+print(chat_admins)
 
 # Реализация логирования в отдельный файл: moderator.log
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
@@ -34,19 +36,6 @@ async def delete_message(message: types.Message, sleep_time: int = 0):
 
 def check_sub_channel(chat_member):
     return chat_member['status'] != "left"
-
-
-@dp.message_handler(commands=['mute'], commands_prefix="/")
-async def mute(message: types.Message):
-    if str(message.from_user.id) == cfg.ADMIN_ID:
-        if not message.reply_to_message:
-            await message.reply("mute выдается в ответ на сообщение!")
-            return
-
-        mute_sec = int(message.text[6:])
-        db.add_mute(message.reply_to_message.from_user.id, mute_sec)
-        await message.bot.delete_message(cfg.CHAT_ID, message.message_id)
-        await message.reply_to_message.reply(f"Занят горловым миньетом на {mute_sec} минут!")
 
 
 # Декоратор накинуть мут в чате. отправить !мут 55 в ответ сообщения (мут на 55 мин)
@@ -106,10 +95,6 @@ async def start_commandr(message: types.Message):
 
 if __name__ == "__main__":
     executor.start_polling(dp, skip_updates=True)
-
-# , on_startup=on_startup
-# async def on_startup(_):
-#     print(' @zrknbot=>TOKEN:5154856916:AAHhqjpbsoufPpYLq3_vXCGfhwjJN368jiE\nБот готов к работе...')
 
 # @dp.message_handler(commands=['id'], commands_prefix="/")
 # async def get_id(message: types.Message):

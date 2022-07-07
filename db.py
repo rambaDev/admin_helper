@@ -28,3 +28,13 @@ class Database:
     def add_mute(self, user_id, mute_time):
         with self.connection:
             return self.connection.execute("UPDATE 'users' SET 'mute_time' = ? WHERE 'user_id' = ?", (int(time.time()) + (mute_time * 60), user_id,))
+
+#    def examination_white_list(self, user_id):
+#        with self.connection:
+#            check = self.cursor.execute(
+#                "SELECT * FROM 'users' WHERE 'user_id' = ?", (user_id,)).fetchone()
+#            return int(check[3]) >= 1
+
+#    def add_wite_list(self, user_id, white_list):
+#        with self.connection:
+#            return self.connection.execute("INSERT INTO 'users' ('white_list') VALUES(?)", 1)
